@@ -15,6 +15,9 @@ class GitHubService:
             "owner": payload["repository"]["owner"]["login"],
             "head_branch": payload["pull_request"]["head"]["ref"],
             "base_branch": payload["pull_request"]["base"]["ref"]
+            "action": payload.get("action"),
+            "repository": payload.get("repository", {}).get("name"),
+            "pr_number": payload.get("pull_request", {}).get("number"),
         }
 
     @staticmethod
