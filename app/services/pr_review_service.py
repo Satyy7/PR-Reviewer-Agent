@@ -1,29 +1,55 @@
 from app.services.github_service import GitHubService
 from app.services.gemini_service import GeminiService
 
+from app.formatters.github_comment_formatter import (
+    GitHubCommentFormatter
+)
+
 
 class PRReviewService:
 
     @staticmethod
-    def review_pull_request(payload: dict):
+    def review_pull_request(
+        payload: dict
+    ):
 
-        pr_info = GitHubService.extract_pr_info(payload)
+        pr_info = (
+            GitHubService.extract_pr_info(
+                payload
+            )
+        )
 
-        pr_details = GitHubService.get_pr_details(
+        pr_details = (
+            GitHubService.get_pr_details(
+                owner=pr_info["owner"],
+                repo=pr_info["repo_name"],
+                pr_number=pr_info["pr_number"]
+            )
+        )
+
+        diff_content = (
+            GitHubService.get_pr_diff(
+                pr_details["diff_url"]
+            )
+        )
+
+        review = (
+            GeminiService()
+            .review_diff(
+                diff_content
+            )
+        )
+
+        comment = (
+            GitHubCommentFormatter
+            .format(review)
+        )
+
+        GitHubService.post_pr_comment(
             owner=pr_info["owner"],
             repo=pr_info["repo_name"],
-            pr_number=pr_info["pr_number"]
+            pr_number=pr_info["pr_number"],
+            comment=comment
         )
 
-        diff_content = GitHubService.get_pr_diff(
-            pr_details["diff_url"]
-        )
-
-        review = GeminiService().review_diff(
-            diff_content
-        )
-
-        return {
-            "pr_info": pr_info,
-            "review": review
-        }
+        return review

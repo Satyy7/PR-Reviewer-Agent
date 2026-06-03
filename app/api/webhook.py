@@ -1,47 +1,65 @@
-from fastapi import APIRouter, Request
+from fastapi import APIRouter
+from fastapi import Request
+
 import asyncio
 
-from app.services.pr_review_service import PRReviewService
+from app.core.logger import logger
+
+from app.services.pr_review_service import (
+    PRReviewService
+)
 
 router = APIRouter()
 
 
-async def run_review(payload: dict):
+async def run_review(
+    payload: dict
+):
 
     try:
 
-        print("Starting AI review...")
+        logger.info(
+            "Starting AI review..."
+        )
 
-        result = PRReviewService.review_pull_request(
+        PRReviewService.review_pull_request(
             payload
         )
 
-        print("=" * 80)
-        print("AI REVIEW")
-        print("=" * 80)
-
-        print(result["review"])
-
-        print("Review completed.")
+        logger.info(
+            "Review completed."
+        )
 
     except Exception as e:
 
-        print("Review failed:")
-        print(str(e))
+        logger.exception(
+            f"Review failed: {str(e)}"
+        )
 
 
 @router.post("/github")
-async def github_webhook(request: Request):
+async def github_webhook(
+    request: Request
+):
 
     payload = await request.json()
 
-    event_type = request.headers.get("X-GitHub-Event")
+    event_type = (
+        request.headers.get(
+            "X-GitHub-Event"
+        )
+    )
 
     if event_type == "pull_request":
 
-        action = payload.get("action")
+        action = payload.get(
+            "action"
+        )
 
-        if action in ["opened", "synchronize"]:
+        if action in [
+            "opened",
+            "synchronize"
+        ]:
 
             asyncio.create_task(
                 run_review(payload)

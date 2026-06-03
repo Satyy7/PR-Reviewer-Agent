@@ -1,39 +1,60 @@
-def format_review(review: dict) -> str:
+class GitHubCommentFormatter:
 
-    summary = review["summary"]
+    @staticmethod
+    def format(review: dict) -> str:
 
-    comment = f"""
+        findings = review.get(
+            "findings",
+            []
+        )
+
+        summary = review.get(
+            "summary",
+            {}
+        )
+
+        if not findings:
+
+            return """
 # 🤖 AI PR Review
 
-## Summary
-
-- Total Findings: {summary["total_findings"]}
-- Overall Severity: {summary["overall_severity"]}
-
----
+No significant issues were found.
 """
 
-    findings = review.get("findings", [])
+        markdown = "# 🤖 AI PR Review\n\n"
 
-    if not findings:
+        markdown += (
+            f"**Total Findings:** "
+            f"{summary.get('total_findings', 0)}\n\n"
+        )
 
-        comment += "\n✅ No significant issues found.\n"
-        return comment
+        markdown += (
+            f"**Overall Severity:** "
+            f"{summary.get('overall_severity', 'NONE')}\n\n"
+        )
 
-    for finding in findings:
+        markdown += "---\n\n"
 
-        comment += f"""
-### {finding["severity"]} | {finding["category"]}
+        for finding in findings:
 
-**{finding["title"]}**
+            markdown += (
+                f"## {finding['severity']} | "
+                f"{finding['category']}\n\n"
+            )
 
-{finding["description"]}
+            markdown += (
+                f"### {finding['title']}\n\n"
+            )
 
-**Recommendation**
+            markdown += (
+                f"{finding['description']}\n\n"
+            )
 
-{finding["recommendation"]}
+            markdown += (
+                f"**Recommendation:** "
+                f"{finding['recommendation']}\n\n"
+            )
 
----
-"""
+            markdown += "---\n\n"
 
-    return comment
+        return markdown

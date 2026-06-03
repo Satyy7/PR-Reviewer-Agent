@@ -1,6 +1,10 @@
+import json
+
 from google import genai
 
 from app.core.config import settings
+from app.prompts.review_prompt import REVIEW_PROMPT
+from app.schemas.review_schema import ReviewResponse
 
 
 class GeminiService:
@@ -14,29 +18,32 @@ class GeminiService:
     def review_diff(
         self,
         diff_content: str
-    ) -> str:
+    ) -> dict:
 
-        prompt = f"""
-You are an expert software engineer.
-
-Review the following Git diff.
-
-Identify:
-- Bugs
-- Security Issues
-- Performance Problems
-- Code Quality Issues
-
-Provide actionable feedback.
-
-Diff:
-
-{diff_content}
-"""
+        prompt = REVIEW_PROMPT.format(
+            diff=diff_content
+        )
 
         response = self.client.models.generate_content(
             model="gemini-2.5-flash",
             contents=prompt
         )
 
-        return response.text
+        cleaned_text = (
+            response.text
+            .replace("```json", "")
+            .replace("```", "")
+            .strip()
+        )
+
+        review_json = json.loads(
+            cleaned_text
+        )
+
+        validated_review = (
+            ReviewResponse.model_validate(
+                review_json
+            )
+        )
+
+        return validated_review.model_dump()
