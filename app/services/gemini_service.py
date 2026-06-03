@@ -3,7 +3,6 @@ import json
 from google import genai
 
 from app.core.config import settings
-from app.prompts.review_prompt import REVIEW_PROMPT
 from app.schemas.review_schema import ReviewResponse
 
 
@@ -15,15 +14,10 @@ class GeminiService:
             api_key=settings.gemini_api_key
         )
 
-    def review_diff(
+    def generate_json_review(
         self,
-        diff_content: str
+        prompt: str
     ) -> dict:
-
-        prompt = REVIEW_PROMPT.replace(
-        "__DIFF_PLACEHOLDER__",
-        diff_content
-)
 
         response = self.client.models.generate_content(
             model="gemini-2.5-flash",
