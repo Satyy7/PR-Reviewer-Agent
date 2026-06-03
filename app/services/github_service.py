@@ -9,6 +9,12 @@ class GitHubService:
     def extract_pr_info(payload: dict):
 
         return {
+            "action": payload["action"],
+            "pr_number": payload["number"],
+            "repo_name": payload["repository"]["name"],
+            "owner": payload["repository"]["owner"]["login"],
+            "head_branch": payload["pull_request"]["head"]["ref"],
+            "base_branch": payload["pull_request"]["base"]["ref"]
             "action": payload.get("action"),
             "repository": payload.get("repository", {}).get("name"),
             "pr_number": payload.get("pull_request", {}).get("number"),
