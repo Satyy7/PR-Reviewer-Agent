@@ -28,6 +28,15 @@ async def github_webhook(request: Request):
             repo=pr_info["repo_name"],
             pr_number=pr_info["pr_number"]
         )
+        diff_content = GitHubService.get_pr_diff(
+            pr_details["diff_url"]
+        )
+
+        print("=" * 80)
+        print("DIFF CONTENT")
+        print("=" * 80)
+
+        print(diff_content[:3000])
 
         print("\nPR DETAILS")
         print(f"Title      : {pr_details['title']}")
