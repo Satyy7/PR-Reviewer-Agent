@@ -1,8 +1,33 @@
 from fastapi import APIRouter, Request
+import asyncio
 
 from app.services.pr_review_service import PRReviewService
 
 router = APIRouter()
+
+
+async def run_review(payload: dict):
+
+    try:
+
+        print("Starting AI review...")
+
+        result = PRReviewService.review_pull_request(
+            payload
+        )
+
+        print("=" * 80)
+        print("AI REVIEW")
+        print("=" * 80)
+
+        print(result["review"])
+
+        print("Review completed.")
+
+    except Exception as e:
+
+        print("Review failed:")
+        print(str(e))
 
 
 @router.post("/github")
@@ -18,16 +43,10 @@ async def github_webhook(request: Request):
 
         if action in ["opened", "synchronize"]:
 
-            result = PRReviewService.review_pull_request(
-                payload
+            asyncio.create_task(
+                run_review(payload)
             )
 
-            print("=" * 80)
-            print("AI REVIEW")
-            print("=" * 80)
-
-            print(result["review"])
-
     return {
-        "message": "received"
+        "message": "accepted"
     }
