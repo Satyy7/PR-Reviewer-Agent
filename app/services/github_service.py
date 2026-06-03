@@ -69,3 +69,31 @@ class GitHubService:
         response.raise_for_status()
 
         return response.text
+    
+    @staticmethod
+    def post_pr_comment(
+        owner: str,
+        repo: str,
+        pr_number: int,
+        comment: str
+    ):
+
+        url = (
+            f"https://api.github.com/repos/"
+            f"{owner}/{repo}/issues/{pr_number}/comments"
+        )
+
+        response = requests.post(
+            url,
+            headers={
+                "Authorization": f"Bearer {settings.github_token}",
+                "Accept": "application/vnd.github+json"
+            },
+            json={
+                "body": comment
+            }
+        )
+
+        response.raise_for_status()
+
+        return response.json()

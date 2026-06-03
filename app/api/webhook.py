@@ -1,50 +1,104 @@
-from fastapi import APIRouter, Request
+from fastapi import APIRouter
+from fastapi import Request
+import asyncio
 
-from app.services.github_service import GitHubService
+from app.core.logger import logger
+
+from app.services.pr_review_service import (
+    PRReviewService
+)
+
+from app.utils.security import (
+    verify_github_signature
+)
 
 router = APIRouter()
 
 
+async def run_review(
+    payload: dict
+):
+
+    try:
+
+        logger.info(
+            "Starting AI review..."
+        )
+
+        PRReviewService.review_pull_request(
+            payload
+        )
+
+        logger.info(
+            "Review completed."
+        )
+
+    except Exception as e:
+
+        logger.exception(
+            f"Review failed: {str(e)}"
+        )
+
+
 @router.post("/github")
-async def github_webhook(request: Request):
+async def github_webhook(
+    request: Request
+):
+
+    body = await request.body()
+
+    signature = request.headers.get(
+        "X-Hub-Signature-256"
+    )
+
+    if not verify_github_signature(
+        body,
+        signature
+    ):
+
+        logger.warning(
+            "Invalid GitHub signature"
+        )
+
+        return {
+            "message": "invalid signature"
+        }
 
     payload = await request.json()
 
-    event_type = request.headers.get("X-GitHub-Event")
+    event_type = request.headers.get(
+        "X-GitHub-Event"
+    )
 
-    print("=" * 80)
-    print(f"EVENT TYPE: {event_type}")
-    print("=" * 80)
+    if event_type != "pull_request":
 
-    if event_type == "pull_request":
+        return {
+            "message": "ignored"
+        }
 
-        pr_info = GitHubService.extract_pr_info(payload)
+    action = payload.get(
+        "action"
+    )
 
-        print("PR INFO")
-        print(pr_info)
+    if payload["pull_request"]["draft"]:
 
-        pr_details = GitHubService.get_pr_details(
-            owner=pr_info["owner"],
-            repo=pr_info["repo_name"],
-            pr_number=pr_info["pr_number"]
-        )
-        diff_content = GitHubService.get_pr_diff(
-            pr_details["diff_url"]
+        logger.info(
+            "Draft PR ignored"
         )
 
-        print("=" * 80)
-        print("DIFF CONTENT")
-        print("=" * 80)
+        return {
+            "message": "draft pr ignored"
+        }
 
-        print(diff_content[:3000])
+    if action in [
+        "opened",
+        "synchronize"
+    ]:
 
-        print("\nPR DETAILS")
-        print(f"Title      : {pr_details['title']}")
-        print(f"State      : {pr_details['state']}")
-        print(f"Author     : {pr_details['user']['login']}")
-        print(f"Diff URL   : {pr_details['diff_url']}")
-        print(f"Patch URL  : {pr_details['patch_url']}")
+        asyncio.create_task(
+            run_review(payload)
+        )
 
     return {
-        "message": "received"
+        "message": "accepted"
     }
