@@ -55,3 +55,17 @@ class GitHubService:
         response.raise_for_status()
 
         return response.json()
+    
+    @staticmethod
+    def get_pr_diff(diff_url: str):
+
+        response = requests.get(
+            diff_url,
+            headers={
+                "Authorization": f"Bearer {settings.github_token}"
+            }
+        )
+
+        response.raise_for_status()
+
+        return response.text
