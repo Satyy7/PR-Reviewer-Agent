@@ -1,9 +1,5 @@
 import requests
 
-import requests
-
-from app.core.config import settings
-
 from app.core.config import settings
 
 
@@ -27,16 +23,14 @@ class GitHubService:
         response = requests.get(
             "https://api.github.com/user",
             headers={
-                "Authorization": f"Bearer {settings.github_token}"
+                "Authorization": f"Bearer {settings.github_token}",
+                "Accept": "application/vnd.github+json"
             }
         )
 
+        response.raise_for_status()
+
         return response.json()
-    
-
-
-
-class GitHubService:
 
     @staticmethod
     def get_pr_details(
