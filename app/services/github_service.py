@@ -1,5 +1,9 @@
 import requests
 
+import requests
+
+from app.core.config import settings
+
 from app.core.config import settings
 
 
@@ -15,9 +19,6 @@ class GitHubService:
             "owner": payload["repository"]["owner"]["login"],
             "head_branch": payload["pull_request"]["head"]["ref"],
             "base_branch": payload["pull_request"]["base"]["ref"]
-            "action": payload.get("action"),
-            "repository": payload.get("repository", {}).get("name"),
-            "pr_number": payload.get("pull_request", {}).get("number"),
         }
 
     @staticmethod
@@ -29,5 +30,34 @@ class GitHubService:
                 "Authorization": f"Bearer {settings.github_token}"
             }
         )
+
+        return response.json()
+    
+
+
+
+class GitHubService:
+
+    @staticmethod
+    def get_pr_details(
+        owner: str,
+        repo: str,
+        pr_number: int
+    ):
+
+        url = (
+            f"https://api.github.com/repos/"
+            f"{owner}/{repo}/pulls/{pr_number}"
+        )
+
+        response = requests.get(
+            url,
+            headers={
+                "Authorization": f"Bearer {settings.github_token}",
+                "Accept": "application/vnd.github+json"
+            }
+        )
+
+        response.raise_for_status()
 
         return response.json()
