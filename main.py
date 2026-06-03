@@ -4,7 +4,7 @@ from app.api.webhook import router as webhook_router
 from app.api.health import router as health_router
 from app.api.github_test import router as github_test_router
 
-
+from app.api.gemini_test import router as gemini_router
 
 
 app = FastAPI(
@@ -28,6 +28,12 @@ app.include_router(
     github_test_router,
     prefix="/github",
     tags=["GitHub"]
+)
+
+app.include_router(
+    gemini_router,
+    prefix="/gemini",
+    tags=["Gemini"]
 )
 
 

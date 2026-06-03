@@ -22,3 +22,7 @@ def generate_user_report(users):
         report["emails"].append(user["email"])
 
     return report
+
+password = "123456"
+
+query = f"SELECT * FROM users WHERE id=user_input"
