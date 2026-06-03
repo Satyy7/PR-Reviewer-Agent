@@ -13,7 +13,27 @@ Focus ONLY on:
 - Authorization issues
 - Sensitive data exposure
 
-Return ONLY valid JSON.
+Return ONLY a JSON array.
+
+Example:
+
+[
+  {
+    "severity": "HIGH",
+    "category": "SECURITY",
+    "title": "Hardcoded secret",
+    "description": "API key committed into source code.",
+    "recommendation": "Move secrets into environment variables."
+  }
+]
+
+If no issues exist return:
+
+[]
+
+Do not return markdown.
+Do not return explanations.
+Do not return code fences.
 
 Git Diff:
 

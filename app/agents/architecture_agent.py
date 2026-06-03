@@ -14,11 +14,11 @@ def architecture_agent(state):
         diff
     )
 
-    review = (
-        GeminiService()
-        .generate_json_review(prompt)
-    )
+    findings = (
+    GeminiService()
+    .generate_findings(prompt)
+)
 
     return {
-        "architecture_review": review
+        "architecture_review": findings
     }
