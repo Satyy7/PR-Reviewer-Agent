@@ -16,8 +16,14 @@ async def github_webhook(request: Request):
 
         pr_info = GitHubService.extract_pr_info(payload)
 
+        pr_details = GitHubService.get_pr_details(
+            owner=pr_info["owner"],
+            repo=pr_info["repo_name"],
+            pr_number=pr_info["pr_number"]
+        )
+
         print("=" * 80)
-        print(pr_info)
+        print("DIFF URL:", pr_details["diff_url"])
         print("=" * 80)
 
     return {"message": "received"}
