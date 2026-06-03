@@ -3,7 +3,10 @@ from app.services.gemini_service import GeminiService
 from app.prompts.architecture_prompt import (
     ARCHITECTURE_PROMPT
 )
-
+from app.core.logger import logger
+logger.info(
+    "Architecture agent started"
+)
 
 def architecture_agent(state):
 
@@ -18,7 +21,9 @@ def architecture_agent(state):
     GeminiService()
     .generate_findings(prompt)
 )
-
+    logger.info(
+    "Architecture agent completed"
+)
     return {
         "architecture_review": findings
     }
