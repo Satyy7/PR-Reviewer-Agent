@@ -20,9 +20,10 @@ class GeminiService:
         diff_content: str
     ) -> dict:
 
-        prompt = REVIEW_PROMPT.format(
-            diff=diff_content
-        )
+        prompt = REVIEW_PROMPT.replace(
+        "__DIFF_PLACEHOLDER__",
+        diff_content
+)
 
         response = self.client.models.generate_content(
             model="gemini-2.5-flash",

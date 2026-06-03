@@ -33,6 +33,14 @@ class PRReviewService:
             )
         )
 
+        MAX_DIFF_SIZE = 50000
+
+        if len(diff_content) > MAX_DIFF_SIZE:
+
+            diff_content = diff_content[
+                :MAX_DIFF_SIZE
+            ]
+
         review = (
             GeminiService()
             .review_diff(

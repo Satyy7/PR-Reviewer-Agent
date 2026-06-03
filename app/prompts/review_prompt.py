@@ -42,5 +42,5 @@ Return ONLY valid JSON.
 
 Git Diff:
 
-{diff}
+__DIFF_PLACEHOLDER__
 """

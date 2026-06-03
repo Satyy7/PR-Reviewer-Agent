@@ -1,12 +1,15 @@
 from fastapi import APIRouter
 from fastapi import Request
-
 import asyncio
 
 from app.core.logger import logger
 
 from app.services.pr_review_service import (
     PRReviewService
+)
+
+from app.utils.security import (
+    verify_github_signature
 )
 
 router = APIRouter()
@@ -42,28 +45,59 @@ async def github_webhook(
     request: Request
 ):
 
-    payload = await request.json()
+    body = await request.body()
 
-    event_type = (
-        request.headers.get(
-            "X-GitHub-Event"
-        )
+    signature = request.headers.get(
+        "X-Hub-Signature-256"
     )
 
-    if event_type == "pull_request":
+    if not verify_github_signature(
+        body,
+        signature
+    ):
 
-        action = payload.get(
-            "action"
+        logger.warning(
+            "Invalid GitHub signature"
         )
 
-        if action in [
-            "opened",
-            "synchronize"
-        ]:
+        return {
+            "message": "invalid signature"
+        }
 
-            asyncio.create_task(
-                run_review(payload)
-            )
+    payload = await request.json()
+
+    event_type = request.headers.get(
+        "X-GitHub-Event"
+    )
+
+    if event_type != "pull_request":
+
+        return {
+            "message": "ignored"
+        }
+
+    action = payload.get(
+        "action"
+    )
+
+    if payload["pull_request"]["draft"]:
+
+        logger.info(
+            "Draft PR ignored"
+        )
+
+        return {
+            "message": "draft pr ignored"
+        }
+
+    if action in [
+        "opened",
+        "synchronize"
+    ]:
+
+        asyncio.create_task(
+            run_review(payload)
+        )
 
     return {
         "message": "accepted"
