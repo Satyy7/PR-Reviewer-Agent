@@ -16,35 +16,27 @@ Focus ONLY on:
 - Poor separation of concerns
 - Technical debt introduction
 
-Rules:
+Return ONLY a JSON array.
 
-- Ignore formatting issues.
-- Ignore linting issues.
-- Ignore documentation suggestions.
-- Ignore security issues.
-- Ignore performance issues.
-- Ignore architecture issues.
-- Report only actionable findings.
-- Maximum 5 findings.
-- If no significant issues exist, return an empty findings array.
+Example:
 
-Return ONLY valid JSON.
+[
+  {
+    "severity": "MEDIUM",
+    "category": "MAINTAINABILITY",
+    "title": "Duplicate business logic",
+    "description": "The same validation logic appears in multiple places.",
+    "recommendation": "Extract shared logic into a reusable function."
+  }
+]
 
-{
-  "summary": {
-    "total_findings": 0,
-    "overall_severity": "NONE"
-  },
-  "findings": [
-    {
-      "severity": "LOW|MEDIUM|HIGH",
-      "category": "MAINTAINABILITY",
-      "title": "Short title",
-      "description": "Issue description",
-      "recommendation": "Suggested fix"
-    }
-  ]
-}
+If no issues exist return:
+
+[]
+
+Do not return markdown.
+Do not return explanations.
+Do not return code fences.
 
 Git Diff:
 

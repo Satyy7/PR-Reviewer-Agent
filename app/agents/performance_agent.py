@@ -14,11 +14,11 @@ def performance_agent(state):
         diff
     )
 
-    review = (
-        GeminiService()
-        .generate_json_review(prompt)
-    )
+    findings = (
+    GeminiService()
+    .generate_findings(prompt)
+)
 
     return {
-        "performance_review": review
+        "performance_review": findings
     }

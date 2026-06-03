@@ -7,44 +7,36 @@ Focus ONLY on:
 
 - Layering violations
 - Tight coupling
-- Poor separation of concerns
 - Dependency management issues
-- Scalability concerns
 - Service boundary violations
+- Scalability concerns
+- Clean architecture violations
+- SOLID principle violations
 - Design pattern misuse
-- Maintainability risks at system level
-- Future extensibility concerns
-- Violations of clean architecture principles
+- Poor extensibility
+- Long-term maintainability risks
 
-Rules:
+Return ONLY a JSON array.
 
-- Ignore formatting issues.
-- Ignore linting issues.
-- Ignore documentation suggestions.
-- Ignore security issues.
-- Ignore performance issues.
-- Ignore minor code style issues.
-- Report only actionable findings.
-- Maximum 5 findings.
-- If no significant issues exist, return an empty findings array.
+Example:
 
-Return ONLY valid JSON.
+[
+  {
+    "severity": "HIGH",
+    "category": "ARCHITECTURE",
+    "title": "Business logic inside API layer",
+    "description": "Controller directly contains business logic.",
+    "recommendation": "Move business logic into service layer."
+  }
+]
 
-{
-  "summary": {
-    "total_findings": 0,
-    "overall_severity": "NONE"
-  },
-  "findings": [
-    {
-      "severity": "LOW|MEDIUM|HIGH",
-      "category": "ARCHITECTURE",
-      "title": "Short title",
-      "description": "Issue description",
-      "recommendation": "Suggested fix"
-    }
-  ]
-}
+If no issues exist return:
+
+[]
+
+Do not return markdown.
+Do not return explanations.
+Do not return code fences.
 
 Git Diff:
 

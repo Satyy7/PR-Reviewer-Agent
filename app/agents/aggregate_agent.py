@@ -3,29 +3,29 @@ def aggregate_agent(state):
     findings = []
 
     findings.extend(
-        state["security_review"].get(
-            "findings",
+        state.get(
+            "security_review",
             []
         )
     )
 
     findings.extend(
-        state["performance_review"].get(
-            "findings",
+        state.get(
+            "performance_review",
             []
         )
     )
 
     findings.extend(
-        state["quality_review"].get(
-            "findings",
+        state.get(
+            "quality_review",
             []
         )
     )
 
     findings.extend(
-        state["architecture_review"].get(
-            "findings",
+        state.get(
+            "architecture_review",
             []
         )
     )
@@ -33,8 +33,11 @@ def aggregate_agent(state):
     overall_severity = "NONE"
 
     severities = {
-        finding["severity"]
-        for finding in findings
+        item.get(
+            "severity",
+            "LOW"
+        )
+        for item in findings
     }
 
     if "HIGH" in severities:

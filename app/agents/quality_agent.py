@@ -14,11 +14,11 @@ def quality_agent(state):
         diff
     )
 
-    review = (
-        GeminiService()
-        .generate_json_review(prompt)
-    )
+    findings = (
+    GeminiService()
+    .generate_findings(prompt)
+)
 
     return {
-        "quality_review": review
+        "quality_review": findings
     }
