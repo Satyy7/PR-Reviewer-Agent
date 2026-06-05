@@ -170,7 +170,8 @@ class GeminiService:
 
     def generate_findings(
         self,
-        prompt: str
+        prompt: str,
+        agent_name: str = "unknown"
     ) -> list:
 
         cleaned_text = (

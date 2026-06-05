@@ -124,9 +124,11 @@ class PRReviewService:
 
         langfuse.create_event(
             name="pr_review_completed",
-            body={
+            input={
                 "repo": pr_info["repo_name"],
-                "pr_number": pr_info["pr_number"],
+                "pr_number": pr_info["pr_number"]
+            },
+            output={
                 "total_findings": review[
                     "summary"
                 ][
@@ -140,5 +142,6 @@ class PRReviewService:
         )
 
         langfuse.flush()
+        
 
         return review
