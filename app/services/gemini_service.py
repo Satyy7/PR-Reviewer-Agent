@@ -132,10 +132,7 @@ class GeminiService:
                     f"{groq_error}"
                 )
 
-                raise RuntimeError(
-                    "All LLM providers failed"
-                )
-
+                return "[]"
     # --------------------------------------------------
     # Single Agent
     # --------------------------------------------------
@@ -182,9 +179,15 @@ class GeminiService:
             )
         )
 
-        findings = json.loads(
-            cleaned_text
-        )
+        try:
+
+            findings = json.loads(
+                cleaned_text
+            )
+
+        except Exception:
+
+            return []
 
         if not isinstance(
             findings,

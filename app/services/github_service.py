@@ -22,6 +22,8 @@ class GitHubService:
     @staticmethod
     def get_authenticated_user():
 
+        # print("TOKEN PREFIX:", settings.github_token[:10])
+
         response = requests.get(
             "https://api.github.com/user",
             headers={
@@ -29,6 +31,11 @@ class GitHubService:
                 "Accept": "application/vnd.github+json"
             }
         )
+
+        # print("TOKEN LENGTH:", len(settings.github_token))
+        # print("STATUS:", response.status_code)
+        # print("BODY:", response.text)
+        # print("RAW TOKEN:", repr(settings.github_token))
 
         response.raise_for_status()
 
@@ -53,6 +60,14 @@ class GitHubService:
                 "Accept": "application/vnd.github+json"
             }
         )
+
+        # print("=" * 80)
+        # print("PR DETAILS DEBUG")
+        # print("=" * 80)
+        # print("URL:", url)
+        # print("STATUS:", response.status_code)
+        # print("BODY:", response.text)
+        # print("=" * 80)
 
         response.raise_for_status()
 
