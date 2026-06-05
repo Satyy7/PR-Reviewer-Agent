@@ -29,3 +29,12 @@ class Settings(BaseSettings):
 
 
 settings = Settings()
+
+# import os
+
+# print("=" * 80)
+# print("CWD:", os.getcwd())
+# print("ENV GITHUB_TOKEN:", repr(os.getenv("GITHUB_TOKEN")))
+# print("=" * 80)
+
+# print("SETTINGS TOKEN:", repr(settings.github_token))
