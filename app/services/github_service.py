@@ -1,3 +1,5 @@
+from urllib import response
+
 import requests
 
 from app.core.config import settings
@@ -93,6 +95,13 @@ class GitHubService:
                 "body": comment
             }
         )
+
+        if not response.ok:
+            print("=" * 80)
+            print("GITHUB ERROR")
+            print("=" * 80)
+            print(response.status_code)
+            print(response.text)
 
         response.raise_for_status()
 

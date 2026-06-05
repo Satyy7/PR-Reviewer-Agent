@@ -3,9 +3,14 @@ from app.services.gemini_service import GeminiService
 from app.prompts.performance_prompt import (
     PERFORMANCE_PROMPT
 )
-
+from app.core.logger import logger
 
 def performance_agent(state):
+
+    logger.info(
+    "Performance agent started"
+)
+
 
     diff = state["diff"]
 
@@ -19,6 +24,9 @@ def performance_agent(state):
     .generate_findings(prompt)
 )
 
+    logger.info(
+    "Performance agent completed"
+)
     return {
         "performance_review": findings
     }

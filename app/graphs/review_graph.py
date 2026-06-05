@@ -1,5 +1,6 @@
 from langgraph.graph import (
     StateGraph,
+    START,
     END
 )
 
@@ -57,23 +58,43 @@ builder.add_node(
     aggregate_agent
 )
 
-builder.set_entry_point(
+# Fan-out
+
+builder.add_edge(
+    START,
     "security"
 )
 
 builder.add_edge(
-    "security",
+    START,
     "performance"
 )
 
 builder.add_edge(
-    "performance",
+    START,
     "quality"
 )
 
 builder.add_edge(
-    "quality",
+    START,
     "architecture"
+)
+
+# Fan-in
+
+builder.add_edge(
+    "security",
+    "aggregate"
+)
+
+builder.add_edge(
+    "performance",
+    "aggregate"
+)
+
+builder.add_edge(
+    "quality",
+    "aggregate"
 )
 
 builder.add_edge(

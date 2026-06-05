@@ -5,12 +5,12 @@ class ReviewState(TypedDict):
 
     diff: str
 
-    security_review: str
+    security_review: list
 
-    performance_review: str
+    performance_review: list
 
-    quality_review: str
+    quality_review: list
 
-    architecture_review: str
+    architecture_review: list
 
     final_review: dict

@@ -12,6 +12,10 @@ from app.utils.security import (
     verify_github_signature
 )
 
+from app.workers.review_tasks import (
+    review_pr_task
+)
+
 router = APIRouter()
 
 
@@ -95,9 +99,9 @@ async def github_webhook(
         "synchronize"
     ]:
 
-        asyncio.create_task(
-            run_review(payload)
-        )
+        review_pr_task.delay(
+    payload
+)
 
     return {
         "message": "accepted"
