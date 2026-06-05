@@ -14,6 +14,15 @@ class Settings(BaseSettings):
 
     github_webhook_secret: str = ""
 
+    # Langfuse
+    langfuse_public_key: str = ""
+
+    langfuse_secret_key: str = ""
+
+    langfuse_host: str = (
+        "https://cloud.langfuse.com"
+    )
+
     gemini_model: str = (
         "gemini-2.5-flash"
     )

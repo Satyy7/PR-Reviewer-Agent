@@ -21,7 +21,7 @@ def architecture_agent(state):
 
     findings = (
     GeminiService()
-    .generate_findings(prompt)
+    .generate_findings(prompt,agent_name="architecture")
 )
     logger.info(
     "Architecture agent completed"

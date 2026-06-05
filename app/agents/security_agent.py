@@ -18,10 +18,11 @@ def security_agent(state):
         "__DIFF_PLACEHOLDER__",
         diff
     )
-
     findings = (
     GeminiService()
-    .generate_findings(prompt)
+    .generate_findings(prompt,
+        agent_name="security"
+    )
 )
     logger.info(
     "Security agent completed"
