@@ -4,11 +4,13 @@ from app.prompts.performance_prompt import (
     PERFORMANCE_PROMPT
 )
 from app.core.logger import logger
-logger.info(
+
+def performance_agent(state):
+
+    logger.info(
     "Performance agent started"
 )
 
-def performance_agent(state):
 
     diff = state["diff"]
 

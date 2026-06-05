@@ -4,12 +4,14 @@ from app.prompts.security_prompt import (
     SECURITY_PROMPT
 )
 from app.core.logger import logger
-logger.info(
-    "Security agent started"
-)
+
 
 def security_agent(state):
-
+    
+    logger.info(
+    "Security agent started"
+)
+    
     diff = state["diff"]
 
     prompt = SECURITY_PROMPT.replace(

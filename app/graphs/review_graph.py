@@ -38,20 +38,20 @@ builder.add_node(
     security_agent
 )
 
-# builder.add_node(
-#     "performance",
-#     performance_agent
-# )
+builder.add_node(
+    "performance",
+    performance_agent
+)
 
 builder.add_node(
     "quality",
     quality_agent
 )
 
-# builder.add_node(
-#     "architecture",
-#     architecture_agent
-# )
+builder.add_node(
+    "architecture",
+    architecture_agent
+)
 
 builder.add_node(
     "aggregate",

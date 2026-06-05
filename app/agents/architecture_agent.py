@@ -4,11 +4,13 @@ from app.prompts.architecture_prompt import (
     ARCHITECTURE_PROMPT
 )
 from app.core.logger import logger
-logger.info(
+
+def architecture_agent(state):
+
+    logger.info(
     "Architecture agent started"
 )
 
-def architecture_agent(state):
 
     diff = state["diff"]
 
