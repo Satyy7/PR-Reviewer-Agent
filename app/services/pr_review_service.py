@@ -19,7 +19,11 @@ from app.core.logger import (
 from app.services.langfuse_service import (
     langfuse
 )
-
+from app.monitoring.metrics import (
+    PR_REVIEWS_TOTAL,
+    REVIEW_DURATION_SECONDS,
+    PR_REVIEW_FAILURES_TOTAL
+)
 
 class PRReviewService:
 
@@ -60,7 +64,7 @@ class PRReviewService:
             )
         )
 
-        MAX_DIFF_SIZE = 50000
+        MAX_DIFF_SIZE = 15000
 
         if len(diff_content) > MAX_DIFF_SIZE:
 
