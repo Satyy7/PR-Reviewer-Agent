@@ -24,7 +24,7 @@ AI PR Reviewer automates the review process using specialized AI agents that eva
 > **Demo Video:** Add your demo recording link here
 
 ```markdown
-[Watch Demo](https://drive.google.com/file/d/1Z5bafOMbkvK_UWV8UMLvC8rS4RcN7xKZ/view?usp=sharing)
+[![Watch Demo](https://img.shields.io/badge/Watch-Demo-blue?style=for-the-badge)](https://drive.google.com/file/d/1Z5bafOMbkvK_UWV8UMLvC8rS4RcN7xKZ/view?usp=sharing)
 ```
 
 ---
