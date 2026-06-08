@@ -21,7 +21,7 @@ def performance_agent(state):
 
     findings = (
     GeminiService()
-    .generate_findings(prompt)
+    .generate_findings(prompt,agent_name="performance")
 )
 
     logger.info(

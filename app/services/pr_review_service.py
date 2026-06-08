@@ -1,3 +1,5 @@
+import time
+
 from app.services.github_service import (
     GitHubService
 )
@@ -14,6 +16,14 @@ from app.core.logger import (
     logger
 )
 
+from app.services.langfuse_service import (
+    langfuse
+)
+from app.monitoring.metrics import (
+    PR_REVIEWS_TOTAL,
+    REVIEW_DURATION_SECONDS,
+    PR_REVIEW_FAILURES_TOTAL
+)
 
 class PRReviewService:
 
@@ -54,7 +64,7 @@ class PRReviewService:
             )
         )
 
-        MAX_DIFF_SIZE = 50000
+        MAX_DIFF_SIZE = 15000
 
         if len(diff_content) > MAX_DIFF_SIZE:
 
@@ -72,12 +82,18 @@ class PRReviewService:
             "Starting LangGraph review"
         )
 
+        start_time = time.time()
+
         result = (
             review_graph.invoke(
                 {
                     "diff": diff_content
                 }
             )
+        )
+
+        duration = (
+            time.time() - start_time
         )
 
         review = result[
@@ -104,5 +120,32 @@ class PRReviewService:
         logger.info(
             "Comment posted successfully"
         )
+
+        logger.info(
+            f"Review completed in "
+            f"{duration:.2f} seconds"
+        )
+
+        langfuse.create_event(
+            name="pr_review_completed",
+            input={
+                "repo": pr_info["repo_name"],
+                "pr_number": pr_info["pr_number"]
+            },
+            output={
+                "total_findings": review[
+                    "summary"
+                ][
+                    "total_findings"
+                ],
+                "duration_seconds": round(
+                    duration,
+                    2
+                )
+            }
+        )
+
+        langfuse.flush()
+        
 
         return review
