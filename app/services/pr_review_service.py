@@ -126,22 +126,17 @@ class PRReviewService:
             f"{duration:.2f} seconds"
         )
 
-        langfuse.create_event(
+        trace = langfuse.create_trace(
+            name="pr_review"
+        )
+
+        trace.create_event(
             name="pr_review_completed",
-            input={
+            metadata={
                 "repo": pr_info["repo_name"],
-                "pr_number": pr_info["pr_number"]
-            },
-            output={
-                "total_findings": review[
-                    "summary"
-                ][
-                    "total_findings"
-                ],
-                "duration_seconds": round(
-                    duration,
-                    2
-                )
+                "pr_number": pr_info["pr_number"],
+                "total_findings": review["summary"]["total_findings"],
+                "duration_seconds": round(duration, 2)
             }
         )
 
